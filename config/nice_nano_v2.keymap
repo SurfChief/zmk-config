@@ -1,0 +1,36 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+/ {
+    behaviors {
+        // Your existing Tap Dance for typing
+        td0: tap_dance_single_key {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TAP_DANCE_SINGLE_KEY";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp A>, <&kp B>, <&kp C>; 
+        };
+
+        // NEW: Hold for 2 seconds to clear Bluetooth bonds
+        bthold: bluetooth_hold_clear {
+            compatible = "zmk,behavior-hold-tap";
+            label = "BLUETOOTH_HOLD_CLEAR";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <4000>; // Hold for 2000ms (2 seconds) to trigger
+            bindings = <&bt>, <&td0>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            // Tap/Double Tap/Triple Tap = A, B, C
+            // Hold for 2 seconds = Clear all Bluetooth connections
+            bindings = <&bthold BT_CLR 0>; 
+        };
+    };
+};
